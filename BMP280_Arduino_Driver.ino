@@ -3,7 +3,7 @@
 void setup() {
     Bmp280_config_t cfg = { 
         {
-        .normal_or_forced_mode = 0,
+        .normal_or_forced_mode = 0x00,
         .temp_measurement = 0x01,
         .press_measurement = 0x01, 
         .iir_filter = 0x01,
@@ -22,6 +22,8 @@ void loop() {
     delay(1000);
     
     request_measurements();
-
-    printf("temp: %ld\tpress: %lud\n", bmp280_get_temperature(), bmp280_get_pressure());
+    
+    char buffer[64];
+    sprintf(buffer, "temp: %ld\tpress: %lu\n", bmp280_get_temperature(), bmp280_get_pressure());
+    Serial.print(buffer);
 }

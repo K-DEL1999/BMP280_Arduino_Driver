@@ -8,7 +8,7 @@ typedef signed long long BMP280_S64_t;
 // BMP280 configuration union
 typedef union {
     struct {
-        unsigned int normal_or_forced_mode : 1; // 0 : normal, 1 : forced
+        unsigned int normal_or_forced_mode : 1; // 0 : normal, 1 : forced 
         unsigned int temp_measurement : 3;
         unsigned int press_measurement : 3;
         unsigned int iir_filter : 3;

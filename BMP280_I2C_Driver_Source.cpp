@@ -24,27 +24,31 @@ enum {
 };
 
 //Compensation Values
-enum {
-    DIG_T1,
-    DIG_T2,
-    DIG_T3,
-    DIG_P1,
-    DIG_P2,
-    DIG_P3,
-    DIG_P4,
-    DIG_P5,
-    DIG_P6,
-    DIG_P7,
-    DIG_P8,
-    DIG_P9
-};
+static unsigned long DIG_T1;
+static signed long DIG_T2;
+static signed long DIG_T3;
+static unsigned long DIG_P1;
+static signed long  DIG_P2;
+static signed long  DIG_P3;
+static signed long  DIG_P4;
+static signed long  DIG_P5;
+static signed long  DIG_P6;
+static signed long  DIG_P7;
+static signed long  DIG_P8;
+static signed long  DIG_P9;
 
 typedef struct {
     BMP280_S32_t temp;
     BMP280_U32_t press;
-    uint8_t flags; // 0 : temp enabled (1), 1 : press enabled (1), 2-7 undefined 
+
+    // bit 0     : temp enabled (1), 
+    // bit 1     : press enabled (1), 
+    // bit 2     : forced_mode enabled (1), 
+    // bits 3-5  : temp meas oversampling 
+    // bits 6-8  : press meas oversampling
+    // bits 9-15 : undefined 
+    uint16_t config;
 } measurements_t;
-// defining 2 bools will take up 2 bytes, so using bit flags will save a byte 
 
 
 // Arrays for burst read and write
@@ -52,9 +56,10 @@ static signed long compensation_words[12]; // compensation words indexed by comp
 static unsigned char data[6]; // max read size is the 6 bytes of data containing pressure and temperature values
 static unsigned char cmds[2]; // atmost only 2 registers can be written continuously so only 2 addresses need to be provided
 
-// Temperature and Pressure values for 
+// Temperature, Pressure and Flag values
+// Flag description above in type defintion 
 static measurements_t m;
-
+ 
 // Data sheet recommends burst reading and writing meaning that instead of writing to/reading from one location at a time and 
 //  terminating transmission you write/read to multiple at once using the BMP280s autoincrementing functionality. When reading the 
 //  BMP280 will increment address automatically
@@ -82,52 +87,85 @@ void init_bmp280(Bmp280_config_t * cfg){
     // inititializes i2c communication
     bmp_i2c_init();
 
-    // determines whether temp and press measurements are enabled
+    // determines whether temp measurements, press measurements and forced mode are enabled  
     if (cfg->temp_measurement){
-        m.flags |= 0x01; 
+        m.config |= 0x01; 
     }
     if (cfg->press_measurement){
-        m.flags |= 0x02;
+        m.config |= 0x02;
     }
+    if (cfg->normal_or_forced_mode){
+        m.config |= 0x04; 
+    }
+    m.config |= ((cfg->press_measurement) << 3);
+    m.config |= ((cfg->temp_measurement) << 6);
 
+    // When setting the initial mode if sensor is intended to be used in forced mode you start in sleep mode. If sensor 
+    // will be used in normal mode you start it off in normal mode. When using forced mode you have to switch sensor to 
+    // forced mode before taking a measurement. After every measurement the sensor returns to sleep mode. Measurements 
+    // can be read once sensor is back in sleep mode.
     cmds[0] = CTRL_MEAS;
-    data[0] |= ((cfg->temp_measurement << 5) | (cfg->press_measurement << 2));
+    data[0] |= ((cfg->temp_measurement << 5) | (cfg->press_measurement << 2) | ((cfg->normal_or_forced_mode) ? SLEEP_MODE : NORMAL_MODE));
     cmds[1] = CONFIG;
-    data[1] |= (((cfg->normal_or_forced_mode) ? 0x0 : cfg->standby_time << 5) | (cfg->iir_filter << 2)); 
-
+    data[1] |= (((cfg->normal_or_forced_mode) ? 0x0 : cfg->standby_time << 5) | (cfg->iir_filter << 2));
+   
     bmp280_burst_write_reg(cmds, 2, data);
     
-    //bmp280_burst_read_reg(cmds, data, 2);   
+    //Check whether write was successful
+    //bmp280_burst_read_reg(cmds, data, 2);
+
+    // Ensures that the calibration values are updated before we starting reading from their registers.
+    cmds[0] = STATUS;
+    do {
+        bmp280_burst_read_reg(cmds, data, 1);
+    } while(*(data) & 0x01);
+     
+    bmp280_get_calibration_values();
 }
 
 void request_measurements(void){
-    if (m.flags == 0x01){
-        cmds[0] = TEMP_MSB;
-        bmp280_burst_read_reg(cmds, data, 3);
-
-        m.temp = bmp280_compensate_T_int32(assemble_measurement(data[0], data[1], data[2])); // MSB : data[0], LSB : data[2] 
+    if (m.config & 0x04){
+        cmds[0] = CTRL_MEAS;
+        data[0] = (unsigned char)(((m.config >> 1) & 0xFC) | FORCED_MODE); 
+        bmp280_burst_write_reg(cmds, 1, data);
     }
-    else if (m.flags == 0x02){
-        cmds[0] = PRESS_MSB;
-        bmp280_burst_read_reg(cmds, data, 3);
 
-        m.press = bmp280_compensate_P_int64(assemble_measurement(data[0], data[1], data[2])); // MSB : data[0], LSB : data[2] 
-    }
-    else if (m.flags == 0x03){
-        cmds[0] = PRESS_MSB;
-        bmp280_burst_read_reg(cmds, data, 6);
-        
-        m.press = bmp280_compensate_P_int64(assemble_measurement(data[0], data[1], data[2])); // MSB : data[0], LSB : data[2]
-        m.temp = bmp280_compensate_T_int32(assemble_measurement(data[3], data[4], data[5])); // MSB : data[0], LSB : data[2]
+    // Ensures that measurements are ready to be read from temp and press registers
+    cmds[0] = STATUS;
+    do {
+        bmp280_burst_read_reg(cmds, data, 1);
+    } while(*(data) & 0x08);
+    
+    switch (m.config & 0x03){
+        case 0x01: 
+            cmds[0] = TEMP_MSB;
+            bmp280_burst_read_reg(cmds, data, 3);
+            m.temp = bmp280_compensate_T_int32(assemble_measurement(data[0], data[1], data[2])); // MSB : data[0], LSB : data[2] 
+            break;
+        case 0x02:
+            cmds[0] = PRESS_MSB;
+            bmp280_burst_read_reg(cmds, data, 3);
+
+            m.press = bmp280_compensate_P_int64(assemble_measurement(data[0], data[1], data[2])); // MSB : data[0], LSB : data[2] 
+            break;
+        case 0x03:
+            cmds[0] = PRESS_MSB;
+            bmp280_burst_read_reg(cmds, data, 6);
+            
+            m.press = bmp280_compensate_P_int64(assemble_measurement(data[0], data[1], data[2])); // MSB : data[0], LSB : data[2]
+            m.temp = bmp280_compensate_T_int32(assemble_measurement(data[3], data[4], data[5])); // MSB : data[0], LSB : data[2]
+            break;
+        default:
+            break;
     }
 }
 
 BMP280_S32_t bmp280_get_temperature(void){
-    return ((m.flags & 0x01) ? m.temp: 0x00);
+    return ((m.config & 0x01) ? m.temp: 0x00);
 }
 
 BMP280_U32_t bmp280_get_pressure(void){
-    return ((m.flags & 0x02) ? m.press: 0x00);
+    return ((m.config & 0x02) ? m.press: 0x00);
 }
 
 void bmp280_reset(void){
