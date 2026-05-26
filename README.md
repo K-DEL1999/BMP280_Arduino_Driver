@@ -35,7 +35,7 @@ void bmp280_normal(void);
 ```
 
 ## Intializing BMP280 Module
-### Init Function and Bmp280_config_t Unions
+### Initialization Function
 To set the BMP280 module up you first have to call **init_bmp280()** and pass a pointer of type **Bmp280_config_t**. You create a variable of the apporiate type and intialize the members with values based on your needs. The first member is **.normal_or_forced_mode** which decides the state in which the module will run. From power off mode (meaning the module is off) the BMP280 enters sleep mode once it is supplied with VCC. Then depending on the supplied configuration value it enters Normal or Sleep mode. **Normal Mode** measures periodically while **Forced Mode** measures whenever a measurement request is made and then returns to sleep mode. Set **.normal_or_forced_mode** to 0 for **Normal Mode** and 1 for **Forced Mode**.
 <br>
 <br>
@@ -54,6 +54,11 @@ After determining the mode of operation you can decide the resolution of the tem
     <img width="45%" height="508" alt="temperature_oversampling_settings" src="https://github.com/user-attachments/assets/6ef3d7f6-9159-47e1-9530-2a9b181a140b" />
     <img width="45%" height="508" alt="pressure_oversampling_settings" src="https://github.com/user-attachments/assets/5ef75c8b-5363-4dae-b7e6-fad40e4369c7" />
 </div>
+<br>
+<br>
+### Setting IIR Filter Coefficient 
+
+
 
 
 
