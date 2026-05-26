@@ -324,6 +324,7 @@ static BMP280_U32_t bmp280_compensate_P_int64(BMP280_S32_t adc_P){
 ```
 
 <br>
+
 ### Memory Map
 This is the memory map provided by the datasheet. Each register address was saved in an **enum** at the top of the source file. What each register does and its corresponding address and size can be found in the datasheet in this directory - bmp280_datasheet.pdf - on pages 24, 25, 26 and 27.
 ```c
