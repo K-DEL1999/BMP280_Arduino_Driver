@@ -190,7 +190,7 @@ static void bmp_i2c_init(void);
 static void bmp280_i2c_transmit(unsigned char * cmds, uint8_t num_of_cmds, unsigned char * data);
 static void bmp280_i2c_receive(unsigned char * cmds, unsigned char * data, uint8_t data_size);
 ```
-Implementations can be found in source!
+Implementations can be found in BMP280_I2C_Driver_Source.cpp!
 <br>
 
 ### How Communication Was Established
@@ -222,6 +222,7 @@ Here is an example of reading from register F3 which is the status register and 
 ### Example Initialization of Module Captured with Logic Analyzer
 
 <img width="2774" height="634" alt="startup_sequence_verification" src="https://github.com/user-attachments/assets/1eb1f398-2729-4ffb-94f5-d70b591e6bb8" />
+<br>
 <br>
 First address F4 (CTRL_MEAS) and F5 (CONFIG) where written to with the appropriate values - these configure the measurement parameters and the overall module configuration. Afterwards address F3 (STATUS) is polled until a flag is set indicating that the callibration values are ready for read - once the STATUS changes from OD to OC. Finally All calibration values are read starting from address 0x88 until 0x9F. Only the first address is needed because the auto incrementing nature of the registers will handle the request. **That is why the enum only contains CALIB00**. A burst read just has to be initiated from register 0x88 and the module will send data until it reaches register 0xFA. There are 24 calibration values. The datasheet provides methods on how to prepare the calibration values and functions for using the calibration values to adjust the incoming data from the module - this information can be found on page 21 and 22 of the datasheet. An implementation of how to retrieve and assemble these values is shown below along with the calibration functions.
 <br>
@@ -322,7 +323,7 @@ static BMP280_U32_t bmp280_compensate_P_int64(BMP280_S32_t adc_P){
 
 ```
 
-
+<br>
 ### Memory Map
 This is the memory map provided by the datasheet. Each register address was saved in an **enum** at the top of the source file. What each register does and its corresponding address and size can be found in the datasheet in this directory - bmp280_datasheet.pdf - on pages 24, 25, 26 and 27.
 ```c
@@ -348,7 +349,19 @@ enum {
 .
 .
 ```
+<br>
+<br>
 <img width="1274" height="608" alt="memory_map" src="https://github.com/user-attachments/assets/04e74236-d98c-4790-9a4b-cd8652135e54" />
+<br>
+<br>
+
+## FINAL OUTPUTS
+<br>
+<img width="532" height="634" alt="example_outputs" src="https://github.com/user-attachments/assets/4be1b9d1-9997-4b0b-b44a-1063ec50873b" />
+<br>
+<br>
+Here you can see the calibration values for this particular module and a couple of measurements taken!
+
 
 
 
