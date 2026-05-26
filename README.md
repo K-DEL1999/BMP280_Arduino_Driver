@@ -160,8 +160,11 @@ void loop() {
 
 ## Source Details
 
+### How Communication Was Established
+The BMP280 uses I2C to communicate with microcontrollers. 
+
 ### Memory Map
-This is the memory map provided by the datasheet. Each register address was saved in an **enum** at the top of the source file. 
+This is the memory map provided by the datasheet. Each register address was saved in an **enum** at the top of the source file. What each register does and its corresponding address and size can be found in the datasheet on pages 24, 25, 26 and 27.
 ```c
 .
 .
