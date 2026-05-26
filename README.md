@@ -60,7 +60,7 @@ After determining the mode of operation you can decide the resolution of the tem
 
 ### Setting IIR Filter Coefficient 
 
-IIR Filters (Infinite Impulse Response Filters) are digital filters that use feedback which means that the output depends on both the current input, previous inputs and the past outputs. The BMP280 module has an IIR Filter due to the sensors readings being affected by short term changes caused by slamming doors, slamming windows, air etc. Basically any external disturbance may affect the module performing a measurement. The IIR Filter mitigates these disturbances and uses the following formula to calculate its filtered value. 
+IIR Filters (Infinite Impulse Response Filters) are digital filters that use feedback which means that the output depends on both the current input, previous input and the past output. The BMP280 module has an IIR Filter due to the sensors readings being affected by short term changes caused by slamming doors, slamming windows, air etc. Basically any external disturbance may affect the module performing a measurement. The IIR Filter mitigates these disturbances and uses the following formula to calculate its filtered value. 
 <br>
 <br>
 <img width="1160" height="157" alt="image" src="https://github.com/user-attachments/assets/cff1f4bd-5efb-4242-8f35-2ddec1082c5b" />
@@ -69,8 +69,14 @@ IIR Filters (Infinite Impulse Response Filters) are digital filters that use fee
 You can select your filter coefficient from the following table...
 <br>
 <br>
+<img width="262" height="381" alt="filter_settings" src="https://github.com/user-attachments/assets/4b4e8f02-379a-48de-94b9-d6cfc7dfc431" />
+<br>
+<br>
+You set the filter coefficient by assign the **.iir_filter** with a value between 0-7. Setting the coefficient equal to 0 will disable the filter.
 
+### Setting Standby Time
 
+This setting is only set when the module operates in **Normal Mode**
 
 
 
