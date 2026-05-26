@@ -169,7 +169,29 @@ void loop() {
 
 ## Source Details
 
-### 
+### Helper Functions
+
+```c
+static void bmp280_burst_read_reg(unsigned char * cmds, unsigned char * data, uint8_t data_size);
+static void bmp280_burst_write_reg(unsigned char * cmds, uint8_t num_of_cmds, unsigned char * data);
+
+// Load calibration values into compensation_words array for later use in calibrating adc values
+static void bmp280_get_calibration_values(void);
+
+// Assembles bytes --- data sheet specifices that 
+static BMP280_S32_t assemble_measurement(unsigned char MSB, unsigned BYTE1, unsigned char LSB);
+
+// Compensation temperature and pressure functions provided by data sheet
+static BMP280_S32_t bmp280_compensate_T_int32(BMP280_S32_t adc_T);
+static BMP280_U32_t bmp280_compensate_P_int64(BMP280_S32_t adc_P);
+
+// I2C Functions
+static void bmp_i2c_init(void);
+static void bmp280_i2c_transmit(unsigned char * cmds, uint8_t num_of_cmds, unsigned char * data);
+static void bmp280_i2c_receive(unsigned char * cmds, unsigned char * data, uint8_t data_size);
+```
+Implementations can be found in source!
+<br>
 
 ### How Communication Was Established
 The BMP280 uses I2C to communicate with microcontrollers. To write you send the **SLAVE_ADDRESS** in write mode then follow it with a **control byte** that holds the address of the register you wish to write to and a **data byte** that holds that data that will be written. After the address you can send continous pairs of **control and data bytes**.
@@ -200,6 +222,104 @@ Here is an example of reading from register F3 which is the status register and 
 ### Example Initialization of Module Captured with Logic Analyzer
 
 <img width="2774" height="634" alt="startup_sequence_verification" src="https://github.com/user-attachments/assets/1eb1f398-2729-4ffb-94f5-d70b591e6bb8" />
+<br>
+First address F4 (CTRL_MEAS) and F5 (CONFIG) where written to with the appropriate values - these configure the measurement parameters and the overall module configuration. Afterwards address F3 (STATUS) is polled until a flag is set indicating that the callibration values are ready for read - once the STATUS changes from OD to OC. Finally All calibration values are read starting from address 0x88 until 0x9F. Only the first address is needed because the auto incrementing nature of the registers will handle the request. **That is why the enum only contains CALIB00**. A burst read just has to be initiated from register 0x88 and the module will send data until it reaches register 0xFA. There are 24 calibration values. The datasheet provides methods on how to prepare the calibration values and functions for using the calibration values to adjust the incoming data from the module - this information can be found on page 21 and 22 of the datasheet. An implementation of how to retrieve and assemble these values is shown below along with the calibration functions.
+<br>
+<br>
+```c
+.
+.
+.
+//Compensation Values
+static unsigned long DIG_T1;
+static signed long DIG_T2;
+static signed long DIG_T3;
+static unsigned long DIG_P1;
+static signed long  DIG_P2;
+static signed long  DIG_P3;
+static signed long  DIG_P4;
+static signed long  DIG_P5;
+static signed long  DIG_P6;
+static signed long  DIG_P7;
+static signed long  DIG_P8;
+static signed long  DIG_P9;
+.
+.
+.
+
+static void bmp280_get_calibration_values(void){
+    // gets calibration values from bmp280 
+    // uses bmp280 built in auto increment for reading all values continously starting from CALIB00 
+    unsigned char calibration_values[24];
+    cmds[0] = CALIB00;
+    bmp280_burst_read_reg(cmds, calibration_values, 24);
+
+    DIG_T1 = (calibration_values[1] << 8) | calibration_values[0];
+    DIG_T2 = (calibration_values[3] << 8) | calibration_values[2];
+    DIG_T3 = (calibration_values[5] << 8) | calibration_values[4];
+    DIG_P1 = ((calibration_values[7] << 8) | calibration_values[6]);
+    DIG_P2 = (calibration_values[9] << 8) | calibration_values[8];
+    DIG_P3 = (calibration_values[11] << 8) | calibration_values[10];
+    DIG_P4 = (calibration_values[13] << 8) | calibration_values[12];
+    DIG_P5 = (calibration_values[15] << 8) | calibration_values[14];
+    DIG_P6 = (calibration_values[17] << 8) | calibration_values[16];
+    DIG_P7 = (calibration_values[19] << 8) | calibration_values[18];
+    DIG_P8 = (calibration_values[21] << 8) | calibration_values[20];
+    DIG_P9 = (calibration_values[23] << 8) | calibration_values[22];
+}
+
+// The datasheet expects the conversion from unsigned 20 bit int to signed long. The 8 bytes are assembled into a unsigned 24 
+//  bit value which is then bitmasked to 20, since only 20 bits contain data. The value is then explicitly converted into a 
+//  signed 32 long which is the type expected by the compensation functions.
+static BMP280_S32_t assemble_measurement(unsigned char MSB, unsigned BYTE1, unsigned char LSB){ // big endian -- MSB to LSB
+    return ((BMP280_S32_t)MSB << 12) | ((BMP280_S32_t)BYTE1 << 4) | ((BMP280_S32_t)LSB >> 4);
+    
+    // BUG !!!! 
+    //return (MSB << 12 | BYTE1 << 4 | LSB >> 4);
+}
+
+// ======================================================== //
+// ===== Compensation functions provided by datasheet ===== //
+// ======================================================== //
+static BMP280_S32_t t_fine;
+static BMP280_S32_t bmp280_compensate_T_int32(BMP280_S32_t adc_T){
+        BMP280_S32_t var1, var2, T;
+    var1 = ((((adc_T>>3) - ((BMP280_S32_t)DIG_T1<<1))) * ((BMP280_S32_t)DIG_T2)) >> 11;
+    var2 = (((((adc_T>>4) - ((BMP280_S32_t)DIG_T1)) * ((adc_T>>4) - ((BMP280_S32_t)DIG_T1)))>> 12) *((BMP280_S32_t)DIG_T3)) >> 14;
+    t_fine = var1 + var2;
+    T = (t_fine * 5 + 128) >> 8;
+    return T;
+}
+
+static BMP280_U32_t bmp280_compensate_P_int64(BMP280_S32_t adc_P){
+    BMP280_S64_t var1, var2, p;
+    var1 = ((BMP280_S64_t)t_fine) - 128000;
+    var2 = var1 * var1 * (BMP280_S64_t)DIG_P6;
+    var2 = var2 + ((var1*(BMP280_S64_t)DIG_P5)<<17);
+    var2 = var2 + (((BMP280_S64_t)DIG_P4)<<35);
+    var1 = ((var1 * var1 * (BMP280_S64_t)DIG_P3)>>8) + ((var1 * (BMP280_S64_t)DIG_P2)<<12);
+    var1 = (((((BMP280_S64_t)1)<<47)+var1))*((BMP280_S64_t)DIG_P1)>>33;
+    
+    if (var1 == 0){
+        return 0; // avoid exception caused by division by zero
+    }
+
+    p = 1048576-adc_P;
+    p = (((p<<31)-var2)*3125)/var1;
+    var1 = (((BMP280_S64_t)DIG_P9) * (p>>13) * (p>>13)) >> 25;
+    var2 = (((BMP280_S64_t)DIG_P8) * p) >> 19;
+    p = ((p + var1 + var2) >> 8) + (((BMP280_S64_t)DIG_P7)<<4);
+
+    return (BMP280_U32_t)p;
+}
+// ======================================================== //
+// ======================================================== //
+
+.
+.
+.
+
+```
 
 
 ### Memory Map
