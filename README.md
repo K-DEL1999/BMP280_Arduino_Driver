@@ -88,6 +88,39 @@ This setting is only set when the module operates in **Normal Mode**. It determi
 <br>
 <br>
 
+### Example Intialization
+```c
+.
+.
+.
+static Bmp280_config_t cfg; // Made static to ensure all undefined members are 0
+int i = 0;
+
+void setup() {
+    cfg = { 
+        {
+        .normal_or_forced_mode = 0x00,
+        .temp_measurement = 0x01,
+        .press_measurement = 0x01, 
+        .iir_filter = 0x01,
+        .standby_time = 0x01
+        }
+    };
+    
+    init_bmp280(&cfg);
+
+}
+.
+.
+.
+```
+<br>
+<br>
+When deciding what values to select for the various members please defer to the following charts supplied by the manufacturers.
+
+<img width="1274" height="733" alt="recommended_settings" src="https://github.com/user-attachments/assets/ec91d026-9b16-4879-8e8c-2a6b5f7929c8" />
+
+
 
 
 
