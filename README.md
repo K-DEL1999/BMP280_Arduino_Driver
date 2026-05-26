@@ -46,6 +46,7 @@ To set the BMP280 module up you first have to call **init_bmp280()** and pass a 
 You can select the resolution of each measurement by setting its **sampling rate** to a rate which is much higher than the **Nyquist Rate**. This tecnique is known as **oversampling** and its used by this module to set the resolution and reduce the noise in a reading. Naturally as you set this value higher it will take more time to perform the read. 
 <br>
 <br>
+
 ### Setting Measurement Resolution
 After determining the mode of operation you can decide the resolution of the temperature measurements you want or you can choose to disable a measurement. You set the **.temp_measurement** to a value inbetween 0 and 7 and you do the same with **.press_measurement**. Setting these members to 0 will disable the senor from collecting the sample for said data while values between 1 and 7 will set the resolution.
 <br>
@@ -56,7 +57,20 @@ After determining the mode of operation you can decide the resolution of the tem
 </div>
 <br>
 <br>
+
 ### Setting IIR Filter Coefficient 
+
+IIR Filters (Infinite Impulse Response Filters) are digital filters that use feedback which means that the output depends on both the current input, previous inputs and the past outputs. The BMP280 module has an IIR Filter due to the sensors readings being affected by short term changes caused by slamming doors, slamming windows, air etc. Basically any external disturbance may affect the module performing a measurement. The IIR Filter mitigates these disturbances and uses the following formula to calculate its filtered value. 
+<br>
+<br>
+<img width="1160" height="157" alt="image" src="https://github.com/user-attachments/assets/cff1f4bd-5efb-4242-8f35-2ddec1082c5b" />
+<br>
+<br>
+You can select your filter coefficient from the following table...
+<br>
+<br>
+
+
 
 
 
