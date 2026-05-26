@@ -367,8 +367,7 @@ Here you can see the calibration values for this particular module and a couple 
 
 ### Follow tutorial for setting up Arduino Environment
 <br>
-<br>
-[### Download ](https://docs.arduino.cc/arduino-cli/getting-started/)
+https://docs.arduino.cc/arduino-cli/getting-started/
 <br>
 <br>
 
