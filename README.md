@@ -47,7 +47,7 @@ You can select the resolution of each measurement by setting its **sampling rate
 <br>
 <br>
 ### Setting Measurement Resolution
-After determining the mode of operation you can decide the resolution of the temperature measurements you want or you can choose to disable this measurement. You set the **.temp_measurement** to a value inbetween 0 and 7 and you do the same with **.press_measurement**. Setting these members are 0 will disable the module from reading said measurement while values between 1 and 7 will set the resolution.
+After determining the mode of operation you can decide the resolution of the temperature measurements you want or you can choose to disable a measurement. You set the **.temp_measurement** to a value inbetween 0 and 7 and you do the same with **.press_measurement**. Setting these members to 0 will disable the senor from collecting the sample for said data while values between 1 and 7 will set the resolution.
 <br>
 <br>
 <div align="center">
