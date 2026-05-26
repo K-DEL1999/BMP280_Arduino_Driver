@@ -190,6 +190,14 @@ The module 7 bit address is 0b111011X where X is determined by whether the SD0 p
 <br>
 **If SD0 is set to GND then address is 0b1110110**
 <br>
+### Example Read From Module 
+<br>
+<br>
+<img width="2151" height="525" alt="typical_measurement" src="https://github.com/user-attachments/assets/0a8fdc1c-b6bd-495b-884f-6601af1291c0" />
+<br>
+<br>
+Here is an example of reading from register F3 which is the status register and then performing a burst read from the temperature and pressure register. The read starts from address F7 and auto increments as each piece of data is sent. The read concludes with a NOACK and stop condition.
+
 ### Memory Map
 This is the memory map provided by the datasheet. Each register address was saved in an **enum** at the top of the source file. What each register does and its corresponding address and size can be found in the datasheet in this directory - bmp280_datasheet.pdf - on pages 24, 25, 26 and 27.
 ```c
