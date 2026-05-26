@@ -50,9 +50,10 @@ You can select the resolution of each measurement by setting its **sampling rate
 After determining the mode of operation you can decide the resolution of the temperature measurements you want or you can choose to disable this measurement. You set the **.temp_measurement** to a value inbetween 0 and 7 and you do the same with **.press_measurement**. Setting these members are 0 will disable the module from reading said measurement while values between 1 and 7 will set the resolution.
 <br>
 <br>
+<div>
 <img width="707" height="508" alt="temperature_oversampling_settings" src="https://github.com/user-attachments/assets/6ef3d7f6-9159-47e1-9530-2a9b181a140b" />
 <img width="571" height="508" alt="pressure_oversampling_settings" src="https://github.com/user-attachments/assets/5ef75c8b-5363-4dae-b7e6-fad40e4369c7" />
-
+</div>
 
 
 
