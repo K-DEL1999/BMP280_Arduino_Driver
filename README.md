@@ -74,6 +74,7 @@ You can select your filter coefficient from the following table...
 </div>
 <br>
 <br>
+
 You set the filter coefficient by assigning the **.iir_filter** member with a value between 0-7. Setting the coefficient equal to 0 will disable the filter. A value of 1 will correspond to a filter coefficient of 2, 2 to 4, 3 to 8, 4,5,6,7 to 16.
 
 ### Setting Standby Time
