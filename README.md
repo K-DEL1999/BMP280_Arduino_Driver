@@ -161,10 +161,21 @@ void loop() {
 ## Source Details
 
 ### How Communication Was Established
-The BMP280 uses I2C to communicate with microcontrollers. 
+The BMP280 uses I2C to communicate with microcontrollers. To write you send the **SLAVE_ADDRESS** in write mode then follow it with a **control byte** that holds the address of the register you wish to write to and a **data byte** that holds that data that will be written. After the address you can send continous pairs of **control and data bytes**.
+<br>
+<br>
+<img width="1235" height="387" alt="image" src="https://github.com/user-attachments/assets/899bbdaf-aafa-4b27-b2d3-e95b68550e58" />
+<br>
+<br>
+To read from the device you send the **SLAVE_ADDRESS** in write mode followed by the desired register to read from. Then either a stop or repeated start condition is sent with the **SLAVE_ADDRESS** in read mode. Afterwards the slave starts sending out data from auto-incremented register addresses until a NOACK and a stop condition occurs.
+<br>
+<br>
+<img width="1235" height="387" alt="image" src="https://github.com/user-attachments/assets/7f7e0207-10a8-45f1-a77b-1b39c49322bf" />
+
+
 
 ### Memory Map
-This is the memory map provided by the datasheet. Each register address was saved in an **enum** at the top of the source file. What each register does and its corresponding address and size can be found in the datasheet on pages 24, 25, 26 and 27.
+This is the memory map provided by the datasheet. Each register address was saved in an **enum** at the top of the source file. What each register does and its corresponding address and size can be found in the datasheet in this directory - bmp280_datasheet.pdf - on pages 24, 25, 26 and 27.
 ```c
 .
 .
