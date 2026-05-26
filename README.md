@@ -2,6 +2,15 @@
 
 This is a BMP280 Driver implentaion in C using arduino CLI and an arduino nano. The BMP280 is a temperature and pressure sensors that communicates with a microcontroller via I2C. Details on how to send data to and retrieve data from the BMP280 are found in the bmp280_datasheet.pdf. 
 
+## Pin Set Up
+<br>
+<br>
+<div align="center">
+<img width="756" height="164" alt="image" src="https://github.com/user-attachments/assets/a7aa70bb-41ba-4f72-966f-1d98fb26f9ab" />
+</div>
+<br>
+<br>
+
 ## Provided Functions, Unions/Structs and Types
 
 Users of the driver are provided functions to initialize the module, request and get data from the module and control the state of the module. They are also given a union definition - Bmp280_config_t - to configure the sensor and also supplied aliases which are integral to communicating properly with the module and creating more readable code.
@@ -160,6 +169,8 @@ void loop() {
 
 ## Source Details
 
+### 
+
 ### How Communication Was Established
 The BMP280 uses I2C to communicate with microcontrollers. To write you send the **SLAVE_ADDRESS** in write mode then follow it with a **control byte** that holds the address of the register you wish to write to and a **data byte** that holds that data that will be written. After the address you can send continous pairs of **control and data bytes**.
 <br>
@@ -171,8 +182,11 @@ To read from the device you send the **SLAVE_ADDRESS** in write mode followed by
 <br>
 <br>
 <img width="1235" height="387" alt="image" src="https://github.com/user-attachments/assets/7f7e0207-10a8-45f1-a77b-1b39c49322bf" />
-
-
+<br>
+<br>
+The module 7 bit address is 0b111011X where X is determined by whether the SD0 pin is GND or VDD. 
+**If SD0 is set to VDD then address is 0b1110111**
+**If SD0 is set to GND then address is 0b1110110**
 
 ### Memory Map
 This is the memory map provided by the datasheet. Each register address was saved in an **enum** at the top of the source file. What each register does and its corresponding address and size can be found in the datasheet in this directory - bmp280_datasheet.pdf - on pages 24, 25, 26 and 27.
