@@ -365,8 +365,7 @@ Here you can see the calibration values for this particular module and a couple 
 
 ## How To Run
 
-### Follow tutorial for setting up Arduino Environment
-<br>
+### Follow tutorial For Setting Up Arduino Environment
 https://docs.arduino.cc/arduino-cli/getting-started/
 <br>
 <br>
@@ -375,7 +374,7 @@ https://docs.arduino.cc/arduino-cli/getting-started/
 You can download as a Zip or pull them through git via terminal.
 <br>
 
-### Run following command once project is set up
+### Run Following Command Once Project Is Set Up
 After plugging in board to PC go to the correct directory and run ...
 <br>
 <br>
