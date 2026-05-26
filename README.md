@@ -120,11 +120,42 @@ When deciding what values to use when intializing the Bmp280 please defer to the
 <br>
 <img width="1274" height="733" alt="recommended_settings" src="https://github.com/user-attachments/assets/ec91d026-9b16-4879-8e8c-2a6b5f7929c8" />
 
+## Using BMP280 Module
 
+### Forced Mode 
 
+When using module in **Force Mode** you must request a measurement first and then get the data.
+```c
+.
+.
+.
+void loop() {
+    request_measurements();
+    
+    char buffer[64];
+    sprintf(buffer, "temp: %ld C \tpress: %lu hPa\n", bmp280_get_temperature(), bmp280_get_pressure());
+    Serial.print(buffer);
+    
+    delay(1000);
+}
+```
 
+### Normal Mode
 
+When using module in **Normal Mode** you can get data whenever. There is no need to call **request_measurements()**.
 
+```c
+.
+.
+.
+void loop() {    
+    char buffer[64];
+    sprintf(buffer, "temp: %ld C \tpress: %lu hPa\n", bmp280_get_temperature(), bmp280_get_pressure());
+    Serial.print(buffer);
+    
+    delay(1000);
+}
+```
 
 
 
