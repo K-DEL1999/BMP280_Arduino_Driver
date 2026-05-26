@@ -51,8 +51,8 @@ After determining the mode of operation you can decide the resolution of the tem
 <br>
 <br>
 <div align="center">
-    <img width="45%" height="100%" alt="temperature_oversampling_settings" src="https://github.com/user-attachments/assets/6ef3d7f6-9159-47e1-9530-2a9b181a140b" />
-    <img width="45%" height="100%" alt="pressure_oversampling_settings" src="https://github.com/user-attachments/assets/5ef75c8b-5363-4dae-b7e6-fad40e4369c7" />
+    <img width="45%" height="508" alt="temperature_oversampling_settings" src="https://github.com/user-attachments/assets/6ef3d7f6-9159-47e1-9530-2a9b181a140b" />
+    <img width="45%" height="508" alt="pressure_oversampling_settings" src="https://github.com/user-attachments/assets/5ef75c8b-5363-4dae-b7e6-fad40e4369c7" />
 </div>
 
 
