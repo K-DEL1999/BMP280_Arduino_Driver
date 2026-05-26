@@ -4,9 +4,14 @@ This is a BMP280 Driver implentaion in C using arduino CLI and an arduino nano. 
 
 ## Provided Functions, Unions/Structs and Types
 
-Users of the driver are provided functions to initialize the module, request and get data from the module and control the state of the module.
+Users of the driver are provided functions to initialize the module, request and get data from the module and control the state of the module. They are also given a union definition - Bmp280_config_t - to configure the sensor and also supplied aliases which are integral to communicating properly with the module and creating more readable code.
 
 ```c
+// Aliases
+typedef signed long BMP280_S32_t;
+typedef unsigned long BMP280_U32_t;
+typedef signed long long BMP280_S64_t;
+
 // BMP280 configuration union
 typedef union {
     struct {
