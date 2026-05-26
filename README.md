@@ -37,6 +37,7 @@ void bmp280_normal(void);
 ## Intializing BMP280 Module
 
 To set the BMP280 module up you first have to call **init_bmp280()** and pass a pointer of type **Bmp280_config_t**. You create a variable of the apporiate type and intialize the members with values based on your needs. The first member is **.normal_or_forced_mode** which decides the state in which the module will run. From power off mode (meaning the module is off) the BMP280 enters sleep mode once it is supplied with VCC. Then depending on the supplied configuration value it enters Normal or Sleep mode. **Normal Mode** measures periodically while **Forced Mode** measures whenever a measurement request is made and then returns to sleep mode. 
+
 <br>
 <img width="1160" height="523" alt="image" src="https://github.com/user-attachments/assets/0da968fb-5890-472f-9c91-5d5cb6869d64" />
 <br>
