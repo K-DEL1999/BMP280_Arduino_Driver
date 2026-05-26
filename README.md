@@ -185,9 +185,11 @@ To read from the device you send the **SLAVE_ADDRESS** in write mode followed by
 <br>
 <br>
 The module 7 bit address is 0b111011X where X is determined by whether the SD0 pin is GND or VDD. 
+<br>
 **If SD0 is set to VDD then address is 0b1110111**
+<br>
 **If SD0 is set to GND then address is 0b1110110**
-
+<br>
 ### Memory Map
 This is the memory map provided by the datasheet. Each register address was saved in an **enum** at the top of the source file. What each register does and its corresponding address and size can be found in the datasheet in this directory - bmp280_datasheet.pdf - on pages 24, 25, 26 and 27.
 ```c
