@@ -152,8 +152,9 @@ void loop() {
     char buffer[64];
     sprintf(buffer, "temp: %ld C \tpress: %lu hPa\n", bmp280_get_temperature(), bmp280_get_pressure());
     Serial.print(buffer);
-    
-    delay(1000);
+
+    // Ensure the make the time greater than the standby time to ensure you read a new measurement each time
+    delay(TIME_GREATER_THAN_STANBY_TIME);
 }
 ```
 
