@@ -69,10 +69,10 @@ IIR Filters (Infinite Impulse Response Filters) are digital filters that use fee
 You can select your filter coefficient from the following table...
 <br>
 <br>
-<img width="262" height="381" alt="filter_settings" src="https://github.com/user-attachments/assets/4b4e8f02-379a-48de-94b9-d6cfc7dfc431" />
+<img width="718" height="378" alt="image" src="https://github.com/user-attachments/assets/1119f055-388c-48bf-b17e-fd8f184fcfd7" />
 <br>
 <br>
-You set the filter coefficient by assign the **.iir_filter** with a value between 0-7. Setting the coefficient equal to 0 will disable the filter.
+You set the filter coefficient by assigning the **.iir_filter** member with a value between 0-7. Setting the coefficient equal to 0 will disable the filter.
 
 ### Setting Standby Time
 
