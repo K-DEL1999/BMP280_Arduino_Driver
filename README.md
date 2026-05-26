@@ -42,7 +42,18 @@ To set the BMP280 module up you first have to call **init_bmp280()** and pass a 
 <img width="1160" height="523" alt="image" src="https://github.com/user-attachments/assets/0da968fb-5890-472f-9c91-5d5cb6869d64" />
 <br>
 <br>
-After determining the mode of operation you decide the resolution of the temperature measurements you want.
+### Quick Note On Measurements
+You can select the resolution of each measurement by setting its **sampling rate** to a rate which is much higher than the **Nyquist Rate**. This tecnique is known as **oversampling** and its used by this module to set the resolution and reduce the noise in a reading. Naturally as you set this value higher it will take more time to perform the read. 
+<br>
+<br>
+### Setting Measurement Resolution
+After determining the mode of operation you can decide the resolution of the temperature measurements you want or you can choose to disable this measurement. You set the **.temp_measurement** to a value inbetween 0 and 7 and you do the same with **.press_measurement**. Setting these members are 0 will disable the module from reading said measurement while values between 1 and 7 will set the resolution.
+<br>
+<br>
+<img width="707" height="508" alt="temperature_oversampling_settings" src="https://github.com/user-attachments/assets/6ef3d7f6-9159-47e1-9530-2a9b181a140b" />
+<img width="571" height="508" alt="pressure_oversampling_settings" src="https://github.com/user-attachments/assets/5ef75c8b-5363-4dae-b7e6-fad40e4369c7" />
+
+
 
 
 
