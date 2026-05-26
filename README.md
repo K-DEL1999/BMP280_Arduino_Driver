@@ -368,7 +368,6 @@ Here you can see the calibration values for this particular module and a couple 
 ### Follow tutorial For Setting Up Arduino Environment
 https://docs.arduino.cc/arduino-cli/getting-started/
 <br>
-<br>
 
 ### Download Files 
 You can download as a Zip or pull them through git via terminal.
@@ -378,7 +377,7 @@ You can download as a Zip or pull them through git via terminal.
 After plugging in board to PC go to the correct directory and run ...
 <br>
 <br>
-arduino-cli upload --verbose -p <PORT> --fqbn arduino:avr:nano <SKETCH_MAIN>
+arduino-cli upload --verbose -p <PORT_NAME> --fqbn arduino:avr:nano <SKETCH_MAIN>
 <br>
 <br>
 **Of course change the arguments to fit your system and setup**
