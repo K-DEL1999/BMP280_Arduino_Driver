@@ -371,12 +371,16 @@ https://docs.arduino.cc/arduino-cli/getting-started/
 <br>
 <br>
 
-### Pull
+### Download Files 
+You can download as a Zip or pull them through git via terminal.
+<br>
 
 ### Run following command once project is set up
-
-arduino-cli upload --verbose -p /dev/ttyUSB0 --fqbn arduino:avr:nano <sketch>
-
+Once in the correct directly run ...
+<br>
+arduino-cli upload --verbose -p </dev/___> --fqbn arduino:avr:nano <sketch>
+<br>
+with the correct parameters filled in
 
 
 
