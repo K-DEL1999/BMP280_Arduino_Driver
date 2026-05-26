@@ -158,6 +158,34 @@ void loop() {
 }
 ```
 
+## Source Details
+
+### Memory Map
+This is the memory map provided by the datasheet. Each register address was saved in an **enum** at the top of the source file. 
+```c
+.
+.
+.
+//BMP280_Registers
+enum {
+    TEMP_XLSB = 0xFC,
+    TEMP_LSB = 0xFB,
+    TEMP_MSB = 0xFA,
+    PRESS_XLSB = 0xF9,
+    PRESS_LSB = 0xF8,
+    PRESS_MSB = 0xF7,
+    CONFIG = 0xF5,
+    CTRL_MEAS = 0xF4,
+    STATUS = 0xF3,
+    RESET = 0xE0,
+    ID = 0xD0,
+    CALIB00 = 0x88
+};
+.
+.
+.
+```
+<img width="1274" height="608" alt="memory_map" src="https://github.com/user-attachments/assets/04e74236-d98c-4790-9a4b-cd8652135e54" />
 
 
 
