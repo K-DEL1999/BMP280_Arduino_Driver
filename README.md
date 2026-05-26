@@ -40,7 +40,7 @@ To set the BMP280 module up you first have to call **init_bmp280()** and pass a 
 
 <br>
 <img width="1160" height="523" alt="image" src="https://github.com/user-attachments/assets/0da968fb-5890-472f-9c91-5d5cb6869d64" />
-
+<br>
 <br>
 After determining the mode of operation you decide the resolution of the temperature measurements you want.
 
