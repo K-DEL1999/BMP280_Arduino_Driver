@@ -376,11 +376,13 @@ You can download as a Zip or pull them through git via terminal.
 <br>
 
 ### Run following command once project is set up
-Once in the correct directly run ...
+After plugging in board to PC go to the correct directory and run ...
 <br>
-arduino-cli upload --verbose -p </dev/___> --fqbn arduino:avr:nano <sketch>
 <br>
-with the correct parameters filled in
+arduino-cli upload --verbose -p <PORT> --fqbn arduino:avr:nano <SKETCH_MAIN>
+<br>
+<br>
+**Of course change the arguments to fit your system and setup**
 
 
 
