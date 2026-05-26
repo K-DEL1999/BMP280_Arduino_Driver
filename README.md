@@ -115,7 +115,7 @@ void setup() {
 .
 ```
 <br>
-When deciding what values to select for the various members please defer to the following charts supplied by the manufacturers.
+When deciding what values to use when intializing the Bmp280 please defer to the following charts supplied by the manufacturers.
 <br>
 <br>
 <img width="1274" height="733" alt="recommended_settings" src="https://github.com/user-attachments/assets/ec91d026-9b16-4879-8e8c-2a6b5f7929c8" />
