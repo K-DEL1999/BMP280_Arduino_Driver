@@ -356,14 +356,27 @@ enum {
 <br>
 <br>
 
-## FINAL OUTPUTS
+## Final Outputs
 <br>
 <img width="532" height="634" alt="example_outputs" src="https://github.com/user-attachments/assets/4be1b9d1-9997-4b0b-b44a-1063ec50873b" />
 <br>
 <br>
 Here you can see the calibration values for this particular module and a couple of measurements taken!
 
+## How To Run
 
+### Follow tutorial for setting up Arduino Environment
+<br>
+<br>
+[### Download ](https://docs.arduino.cc/arduino-cli/getting-started/)
+<br>
+<br>
+
+### Pull
+
+### Run following command once project is set up
+
+arduino-cli upload --verbose -p /dev/ttyUSB0 --fqbn arduino:avr:nano <sketch>
 
 
 
