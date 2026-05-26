@@ -79,7 +79,12 @@ You set the filter coefficient by assigning the **.iir_filter** member with a va
 
 ### Setting Standby Time
 
-This setting is only set when the module operates in **Normal Mode**
+This setting is only set when the module operates in **Normal Mode**. It determines the time inbetween each read. Values can still be read from the modules memory even while a measurement is taking place. To set the time inbetween each read you set **.standby_time** equal to a value inbetween 0-7. The image below maps a standby time to each value.
+<br>
+<br>
+<img width="508" height="541" alt="standby_settings" src="https://github.com/user-attachments/assets/ea500307-36e9-47fc-8173-72f59b70d94f" />
+<br>
+<br>
 
 
 
